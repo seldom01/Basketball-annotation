@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://basketball-annotation.local/schemas/video_annotation.schema.json",
+  "title": "Basketball single-video authoritative annotation",
+  "description": "Authoritative annotations use timestamps relative to the complete source video.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "video",
+    "source_game_id",
+    "duration_sec",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "video": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_game_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_sec": {
+      "type": "number",
+      "minimum": 0
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "$comment": "event_id values must be unique within this array. Each timestamp_sec must be less than or equal to the top-level duration_sec. These cross-item and cross-field constraints are enforced by export_timesoccer.py.",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "timestamp_sec",
+        "fact_zh",
+        "commentary_zh",
+        "commentary_en",
+        "status",
+        "notes"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^E[0-9]{3,}$"
+        },
+        "timestamp_sec": {
+          "type": "number",
+          "minimum": 0,
+          "$comment": "This value must also be less than or equal to the containing document's duration_sec; export_timesoccer.py enforces that cross-field constraint."
+        },
+        "fact_zh": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commentary_zh": {
+          "type": "string"
+        },
+        "commentary_en": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "fact_confirmed",
+            "commentary_confirmed",
+            "ready_for_export"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
+

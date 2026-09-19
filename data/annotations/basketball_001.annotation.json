@@ -1,0 +1,117 @@
+{
+  "schema_version": "1.0",
+  "video": "basketball_001.mp4",
+  "source_game_id": "basketball_game_001",
+  "duration_sec": 60.0,
+  "events": [
+    {
+      "event_id": "E001",
+      "timestamp_sec": 8.0,
+      "fact_zh": "白衣球员罚球命中，同时另一名白衣球员在罚球线内投篮未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E002",
+      "timestamp_sec": 12.0,
+      "fact_zh": "黑衣球员命中两分球。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E003",
+      "timestamp_sec": 17.0,
+      "fact_zh": "白衣球员命中三分球。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E004",
+      "timestamp_sec": 19.0,
+      "fact_zh": "白衣球员在三分线内投篮未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E005",
+      "timestamp_sec": 24.0,
+      "fact_zh": "另一名白衣球员在三分线外投篮未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E006",
+      "timestamp_sec": 25.0,
+      "fact_zh": "黑衣球员命中两分球。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E007",
+      "timestamp_sec": 32.0,
+      "fact_zh": "黑衣球员篮下投篮命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E008",
+      "timestamp_sec": 36.0,
+      "fact_zh": "白衣球员在三分线内投篮未命中，篮球被篮筐弹出。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E009",
+      "timestamp_sec": 39.0,
+      "fact_zh": "一名白衣球员在三分线内投篮未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E010",
+      "timestamp_sec": 46.0,
+      "fact_zh": "黑衣球员在罚球线外投篮未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E011",
+      "timestamp_sec": 47.0,
+      "fact_zh": "白衣球员命中两分球。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    },
+    {
+      "event_id": "E012",
+      "timestamp_sec": 52.0,
+      "fact_zh": "白衣球员在罚球线外投篮命中，紧接着再次投篮但未命中。",
+      "commentary_zh": "",
+      "commentary_en": "",
+      "status": "fact_confirmed",
+      "notes": ""
+    }
+  ]
+}
+
