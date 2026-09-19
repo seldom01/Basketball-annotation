@@ -95,3 +95,54 @@ train/test 划分以后必须按 `source_game_id` 进行，不能把同一场原
 python -m unittest discover -s tests -v
 ```
 
+## 第二阶段：Qwen 受约束 commentary 扩写
+
+第二阶段的数据流为：
+
+```text
+人工确认 fact_zh
+    ↓
+Qwen 查看事件附近的局部视频上下文
+    ↓
+独立 preannotation 候选
+    ↓
+人工审核、拒绝或修改
+    ↓
+人工确认后的 commentary_zh
+```
+
+preannotation 不是 ground truth。`fact_zh` 在 preannotation 中只是生成时的快照，用于对照和恢复检查；唯一权威版本仍在 `data/annotations/`。Qwen 推理脚本不会修改 annotation，也不会自动接受任何候选。
+
+### 局部视频窗口
+
+Qwen 第一版使用 FFmpeg 为每个事件临时生成局部视频片段。默认查看事件前后各 5 秒，并裁剪到源视频范围：
+
+```text
+window_start_sec = max(0, timestamp_sec - context_before_sec)
+window_end_sec = min(duration_sec, timestamp_sec + context_after_sec)
+target_offset_sec = timestamp_sec - window_start_sec
+```
+
+权威 `timestamp_sec` 始终相对于完整源视频。临时片段内的 `target_offset_sec` 只帮助模型定位，不能写回或替换权威时间。
+
+### AutoDL 运行示例
+
+以下命令是未来 AutoDL GPU 环境的预期接口：
+
+```bash
+python scripts/generate_qwen_commentary.py \
+  --annotation data/annotations/basketball_001.annotation.json \
+  --video /root/autodl-tmp/videos/basketball_001.mp4 \
+  --output data/preannotations/basketball_001.qwen2_5_vl_7b.commentary_expansion.preannotation.json \
+  --model Qwen/Qwen2.5-VL-7B-Instruct \
+  --context-before 5 \
+  --context-after 5
+```
+
+`--video` 可以是 Windows 或 AutoDL 的绝对路径；程序只要求其 basename 与 annotation 的 `video` 相同。绝对路径不会写回权威 annotation。
+
+运行时每完成或失败一个事件都会通过同目录临时 JSON 和 `os.replace` 原子保存。再次运行相同任务时，`completed` 事件会跳过，`failed` 和缺失事件会重试。如果 annotation 中的 `event_id`、`timestamp_sec` 或 `fact_zh` 已变化，旧候选会被拒绝复用。
+
+Qwen/PyTorch 依赖只在真正加载模型时导入。本地 Windows 的普通数据测试不需要安装这些依赖。模型、视频解码、FFmpeg 参数和 GPU 推理结果目前均未在 AutoDL 验证，不能视为已经成功运行 Qwen。
+
+人工接受候选时，必须由人工明确指定 event_id 和最终文本，然后才可以把文本写入权威 annotation 的 `commentary_zh`，并将 status 从 `fact_confirmed` 改为 `commentary_confirmed`。本阶段没有自动接受工具。

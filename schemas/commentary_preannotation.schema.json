@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://basketball-annotation.local/schemas/commentary_preannotation.schema.json",
+  "title": "Basketball commentary preannotation",
+  "description": "Unreviewed model-generated commentary candidates. This file is not ground truth.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_annotation_file",
+    "video",
+    "source_game_id",
+    "duration_sec",
+    "model",
+    "task",
+    "prompt_version",
+    "context_before_sec",
+    "context_after_sec",
+    "events"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "source_annotation_file": {
+      "type": "string",
+      "minLength": 1
+    },
+    "video": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_game_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration_sec": {
+      "type": "number",
+      "minimum": 0
+    },
+    "model": {
+      "type": "string",
+      "minLength": 1
+    },
+    "task": {
+      "const": "constrained_commentary_expansion"
+    },
+    "prompt_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "context_before_sec": {
+      "type": "number",
+      "minimum": 0
+    },
+    "context_after_sec": {
+      "type": "number",
+      "minimum": 0
+    },
+    "events": {
+      "type": "array",
+      "$comment": "event_id values must be unique. fact_zh is only a generation-time snapshot of the authoritative annotation, never a second ground truth. The generator enforces uniqueness and snapshot compatibility when resuming.",
+      "items": {
+        "$ref": "#/$defs/event"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "event": {
+      "type": "object",
+      "required": [
+        "event_id",
+        "timestamp_sec",
+        "fact_zh",
+        "window_start_sec",
+        "window_end_sec",
+        "target_offset_sec",
+        "generation_status",
+        "candidate_commentary_zh",
+        "error"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "pattern": "^E[0-9]{3,}$"
+        },
+        "timestamp_sec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "fact_zh": {
+          "type": "string",
+          "minLength": 1,
+          "$comment": "Snapshot copied from the authoritative annotation at generation time."
+        },
+        "window_start_sec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "window_end_sec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "target_offset_sec": {
+          "type": "number",
+          "minimum": 0
+        },
+        "generation_status": {
+          "enum": [
+            "completed",
+            "failed"
+          ]
+        },
+        "candidate_commentary_zh": {
+          "type": "string"
+        },
+        "error": {
+          "type": "string"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "generation_status": {
+                "const": "completed"
+              }
+            },
+            "required": [
+              "generation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "candidate_commentary_zh": {
+                "minLength": 1
+              },
+              "error": {
+                "const": ""
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "generation_status": {
+                "const": "failed"
+              }
+            },
+            "required": [
+              "generation_status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "candidate_commentary_zh": {
+                "const": ""
+              },
+              "error": {
+                "minLength": 1
+              }
+            }
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}
